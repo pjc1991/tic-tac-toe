@@ -54,8 +54,10 @@ function App() {
 
     return (
         <>
-            <main className="bg-black w-1/2 mx-auto p-4 rounded-lg mt-4">
-                <h1>Let&#39;s play Tic-Tac-Toe!</h1>
+            <main className="bg-black w-1/2 mx-auto p-4 rounded-lg mt-4 border-2 border-orange-600">
+                <h1 className="text-center text-4xl text-white font-bold mb-4">
+                    Let&#39;s play Tic-Tac-Toe!
+                </h1>
                 <hr className="border-2 border-orange-600 mt-2"/>
                 <header className="mt-4">
                     <ul className="grid grid-cols-2 gap-4 justify-items-center">
@@ -65,9 +67,6 @@ function App() {
                 </header>
                 <hr className="border-2 border-orange-600 mt-4"/>
                 <section>
-                    <h2 className="text-center mt-4">
-                        Game Board
-                    </h2>
                     <div id="game-board" className="grid grid-cols-3 mt-4 justify-items-center gap-4">
                         {gameBoard.map((occupied, index) => (
                             <Grid key={index} occupied={occupied} onChecked={() => handleCheck(index)}/>
