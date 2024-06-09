@@ -1,56 +1,88 @@
 import {useState} from 'react'
 import Player from "./components/Player.jsx";
-import Grid from "./components/Grid.jsx";
+import GameBoard from "./components/GameBoard.jsx";
 
 function App() {
 
     const [player1, setPlayer1] = useState('Player 1');
     const [player2, setPlayer2] = useState('Player 2');
     const [currentPlayer, setCurrentPlayer] = useState(1);
-    const [gameBoard, setGameBoard] = useState(Array(9).fill(null));
+    const [gameLog, setGameLog] = useState([]);
     const [winner, setWinner] = useState(null);
 
-    function handleCheck(index) {
+    function handleCheck(rowIndex, columnIndex) {
+        const log = {
+            player: currentPlayer,
+            move: {
+                row: rowIndex,
+                column: columnIndex
+            }
+        }
+
+        if (gameLog.some((item) => item.move.row === rowIndex && item.move.column === columnIndex)) {
+            return;
+        }
+
         if (winner) {
             return;
         }
 
-        let newGameBoard = [...gameBoard];
+        const newGameLog = [log, ...gameLog];
+        setGameLog(newGameLog);
+        setCurrentPlayer(() => currentPlayer === 1 ? 2 : 1)
 
-        if (newGameBoard[index] === null) {
-            newGameBoard[index] = currentPlayer === 1 ? 'X' : 'O';
-            setGameBoard(newGameBoard);
-            setCurrentPlayer(() => currentPlayer === 1 ? 2 : 1);
+        const newWinner = getWinner(newGameLog);
+
+        if (newWinner) {
+            setWinner(newWinner);
         }
 
-        if (checkWinner(newGameBoard)) {
-            const winnerName = currentPlayer === 1 ? player1 : player2;
-            setWinner(winnerName);
+        if (!newWinner && newGameLog.length === 9) {
+            setWinner(0);
         }
     }
 
-    function checkWinner(newGameBoard) {
-        const winningCombos = [
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            [0, 4, 8],
-            [2, 4, 6]
+    function getWinner(newGameLog){
+        const winningPatterns = [
+            [[0, 0], [0, 1], [0, 2]],
+            [[1, 0], [1, 1], [1, 2]],
+            [[2, 0], [2, 1], [2, 2]],
+            [[0, 0], [1, 0], [2, 0]],
+            [[0, 1], [1, 1], [2, 1]],
+            [[0, 2], [1, 2], [2, 2]],
+            [[0, 0], [1, 1], [2, 2]],
+            [[0, 2], [1, 1], [2, 0]]
         ];
 
-        for (let combo of winningCombos) {
-            const [a, b, c] = combo;
+        for (let i = 0; i < winningPatterns.length; i++) {
+            const pattern = winningPatterns[i];
+            const player = newGameLog.find((log) => {
+                return pattern.some((item) => item[0] === log.move.row && item[1] === log.move.column);
+            });
 
-            if (newGameBoard[a] && newGameBoard[a] === newGameBoard[b] && newGameBoard[a] === newGameBoard[c]) {
-                return newGameBoard[a];
+            if (player) {
+                const isWinner = pattern.every((item) => {
+                    return newGameLog.some((log) => log.move.row === item[0] && log.move.column === item[1] && log.player === player.player);
+                });
+
+                if (isWinner) {
+                    return player.player;
+                }
             }
         }
-
-        return null;
     }
+
+    function getPlayerName(player) {
+        switch (player) {
+            case 1:
+                return player1;
+            case 2:
+                return player2;
+            default:
+                return '';
+        }
+    }
+
 
     return (
         <>
@@ -61,28 +93,28 @@ function App() {
                 <hr className="border-2 border-orange-600 mt-2"/>
                 <header className="mt-4">
                     <ul className="grid grid-cols-2 gap-4 justify-items-center">
-                       <Player name={player1} symbol="X" onEdit={(name) => setPlayer1(name)}/>
-                       <Player name={player2} symbol="O" onEdit={(name) => setPlayer2(name)}/>
+                        <Player name={player1} symbol="X" onEdit={(name) => setPlayer1(name)}/>
+                        <Player name={player2} symbol="O" onEdit={(name) => setPlayer2(name)}/>
                     </ul>
                 </header>
                 <hr className="border-2 border-orange-600 mt-4"/>
                 <section>
                     <div id="game-board" className="grid grid-cols-3 mt-4 justify-items-center gap-4">
-                        {gameBoard.map((occupied, index) => (
-                            <Grid key={index} occupied={occupied} onChecked={() => handleCheck(index)}/>
-                        ))}
+                        <GameBoard onChecked={handleCheck} gameLog={gameLog}/>
                     </div>
                 </section>
                 <hr className="border-2 border-orange-600 mt-4"/>
                 <section>
                     <h2 className="text-center mt-4">
-                        {winner ? `${winner} wins!` : `Current Player: Player ${currentPlayer}`}
+                        {winner === 0 && 'It is a draw! '}
+                        {(winner && winner !==0) ? `${getPlayerName(winner)} wins!` : null}
+                        {winner === null && `Current player: ${getPlayerName(currentPlayer)}`}
                     </h2>
                     <div className="text-center">
-                        {winner && <button
+                        {winner !== null && <button
                             className="bg-orange-600 border-2 border-black text-white rounded-lg px-2 py-1 mt-4"
                             onClick={() => {
-                                setGameBoard(Array(9).fill(null));
+                                setGameLog([]);
                                 setWinner(null);
                                 setCurrentPlayer(1);
                             }}
@@ -90,6 +122,19 @@ function App() {
                             Play Again
                         </button>}
                     </div>
+                </section>
+                <hr className="border-2 border-orange-600 mt-4"/>
+                <section>
+                    <h2 className="text-center mt-4">
+                        Play log
+                    </h2>
+                    <ul className="text-center">
+                        {gameLog.map((log, index) => (
+                            <li key={index}>
+                                {`${getPlayerName(log.player)} moved to ${log.move.row +1}, ${log.move.column +1}`}
+                            </li>
+                        ))}
+                    </ul>
                 </section>
             </main>
         </>
