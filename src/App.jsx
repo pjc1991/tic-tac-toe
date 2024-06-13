@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import Player from "./components/Player.jsx";
 import GameBoard from "./components/GameBoard.jsx";
+import GameStatus from "./components/GameStatus.jsx";
 
 function App() {
 
@@ -59,7 +60,7 @@ function App() {
             const third = newGameLog.find((log) => log.move.row === pattern[2][0] && log.move.column === pattern[2][1]);
 
             if (first && first.player === second?.player && first.player === third?.player) {
-                return first;
+                return first.player;
             }
         }
 
@@ -103,11 +104,11 @@ function App() {
                 </section>
                 <hr className="border-2 border-orange-600 mt-4"/>
                 <section>
-                    <h2 className="text-center mt-4">
-                        {winner === 0 && 'It is a draw! '}
-                        {(winner && winner !==0) ? `${getPlayerName(winner)} wins!` : null}
-                        {winner === null && `Current player: ${getPlayerName(getCurrentPlayer())}`}
-                    </h2>
+                    <GameStatus
+                        winner={winner}
+                        winnerName={getPlayerName(winner)}
+                        currentPlayerName={getPlayerName(getCurrentPlayer())}
+                    />
                     <div className="text-center">
                         {winner !== null && <button
                             className="bg-orange-600 border-2 border-black text-white rounded-lg px-2 py-1 mt-4"
