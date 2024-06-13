@@ -6,13 +6,20 @@ function App() {
 
     const [player1, setPlayer1] = useState('Player 1');
     const [player2, setPlayer2] = useState('Player 2');
-    const [currentPlayer, setCurrentPlayer] = useState(1);
     const [gameLog, setGameLog] = useState([]);
     const [winner, setWinner] = useState(null);
 
+    function getCurrentPlayer() {
+        if (gameLog.length === 0) {
+            return 1;
+        }
+
+        return gameLog[0].player === 1 ? 2 : 1;
+    }
+
     function handleCheck(rowIndex, columnIndex) {
         const log = {
-            player: currentPlayer,
+            player: getCurrentPlayer(),
             move: {
                 row: rowIndex,
                 column: columnIndex
@@ -29,7 +36,6 @@ function App() {
 
         const newGameLog = [log, ...gameLog];
         setGameLog(newGameLog);
-        setCurrentPlayer(() => currentPlayer === 1 ? 2 : 1)
 
         const newWinner = getWinner(newGameLog);
 
@@ -108,7 +114,7 @@ function App() {
                     <h2 className="text-center mt-4">
                         {winner === 0 && 'It is a draw! '}
                         {(winner && winner !==0) ? `${getPlayerName(winner)} wins!` : null}
-                        {winner === null && `Current player: ${getPlayerName(currentPlayer)}`}
+                        {winner === null && `Current player: ${getPlayerName(getCurrentPlayer())}`}
                     </h2>
                     <div className="text-center">
                         {winner !== null && <button
@@ -116,7 +122,6 @@ function App() {
                             onClick={() => {
                                 setGameLog([]);
                                 setWinner(null);
-                                setCurrentPlayer(1);
                             }}
                         >
                             Play Again
