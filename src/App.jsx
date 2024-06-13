@@ -54,18 +54,12 @@ function App() {
 
         for (let i = 0; i < winningPatterns.length; i++) {
             const pattern = winningPatterns[i];
-            const player = newGameLog.find((log) => {
-                return pattern.some((item) => item[0] === log.move.row && item[1] === log.move.column);
-            });
+            const first = newGameLog.find((log) => log.move.row === pattern[0][0] && log.move.column === pattern[0][1]);
+            const second = newGameLog.find((log) => log.move.row === pattern[1][0] && log.move.column === pattern[1][1]);
+            const third = newGameLog.find((log) => log.move.row === pattern[2][0] && log.move.column === pattern[2][1]);
 
-            if (player) {
-                const isWinner = pattern.every((item) => {
-                    return newGameLog.some((log) => log.move.row === item[0] && log.move.column === item[1] && log.player === player.player);
-                });
-
-                if (isWinner) {
-                    return player.player;
-                }
+            if (first && first.player === second?.player && first.player === third?.player) {
+                return first;
             }
         }
 
