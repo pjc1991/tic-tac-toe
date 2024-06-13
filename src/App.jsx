@@ -7,7 +7,7 @@ function App() {
     const [player1, setPlayer1] = useState('Player 1');
     const [player2, setPlayer2] = useState('Player 2');
     const [gameLog, setGameLog] = useState([]);
-    const [winner, setWinner] = useState(null);
+    const winner = getWinner(gameLog);
 
     function getCurrentPlayer() {
         if (gameLog.length === 0) {
@@ -30,22 +30,14 @@ function App() {
             return;
         }
 
+        const winner = getWinner(gameLog);
+
         if (winner) {
             return;
         }
 
         const newGameLog = [log, ...gameLog];
         setGameLog(newGameLog);
-
-        const newWinner = getWinner(newGameLog);
-
-        if (newWinner) {
-            setWinner(newWinner);
-        }
-
-        if (!newWinner && newGameLog.length === 9) {
-            setWinner(0);
-        }
     }
 
     function getWinner(newGameLog){
@@ -76,6 +68,12 @@ function App() {
                 }
             }
         }
+
+        if (newGameLog.length === 9) {
+            return 0;
+        }
+
+        return null;
     }
 
     function getPlayerName(player) {
@@ -121,7 +119,6 @@ function App() {
                             className="bg-orange-600 border-2 border-black text-white rounded-lg px-2 py-1 mt-4"
                             onClick={() => {
                                 setGameLog([]);
-                                setWinner(null);
                             }}
                         >
                             Play Again
