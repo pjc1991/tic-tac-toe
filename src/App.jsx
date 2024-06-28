@@ -6,8 +6,10 @@ import PlayAgain from "./components/PlayAgain.jsx";
 
 function App() {
 
-    const [player1, setPlayer1] = useState('Player 1');
-    const [player2, setPlayer2] = useState('Player 2');
+    const [playerNames, setPlayerNames] = useState({
+        'X': 'Player 1',
+        'O': 'Player 2'
+    });
     const [gameLog, setGameLog] = useState([]);
     const winner = getWinner(gameLog);
 
@@ -75,9 +77,9 @@ function App() {
     function getPlayerName(player) {
         switch (player) {
             case 1:
-                return player1;
+                return playerNames['X'];
             case 2:
-                return player2;
+                return playerNames['O'];
             default:
                 return '';
         }
@@ -94,8 +96,8 @@ function App() {
                     <hr className="border-2 border-orange-600 mt-2"/>
                     <header className="mt-4">
                         <ul className="grid grid-cols-2 gap-4 justify-items-center">
-                            <Player name={player1} symbol="X" onEdit={(name) => setPlayer1(name)}/>
-                            <Player name={player2} symbol="O" onEdit={(name) => setPlayer2(name)}/>
+                            <Player initialName="Player 1" symbol="X" onEdit={(name) => setPlayerNames({...playerNames, 'X': name})}/>
+                            <Player initialName="Player 2" symbol="O" onEdit={(name) => setPlayerNames({...playerNames, 'O': name})}/>
                         </ul>
                     </header>
                     <hr className="border-2 border-orange-600 mt-4"/>

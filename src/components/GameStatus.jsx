@@ -1,6 +1,5 @@
 export default function GameStatus({winner, winnerName, currentPlayerName}) {
     // 0 : draw, 1 : player1 wins, 2 : player2 wins, null : game is still running
-    console.log(winner);
     return (
         <div className="text-center text-2xl font-bold">
             {winner === 0 && 'Draw!'}
