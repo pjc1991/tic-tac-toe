@@ -14,7 +14,7 @@ export default function GameBoard({gameLog = [], onChecked}) {
                 (row.map((column, columnIndex) =>
                     (
             <div key={`${rowIndex}-${columnIndex}`}
-                className="bg-orange-600 h-52 w-52 rounded-lg flex items-center justify-center text-white text-4xl cursor-pointer"
+                className="bg-orange-600 rounded-lg flex items-center justify-center text-white text-4xl cursor-pointer w-36 h-36"
                 onClick={() => onChecked(rowIndex, columnIndex)}>
                 {column === 1 ? 'X' : column === 2 ? 'O' : ''}
             </div>

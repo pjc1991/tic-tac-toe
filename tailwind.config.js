@@ -5,7 +5,14 @@ export default {
     './index.html',
   ],
   theme: {
-    extend: {},
+    extend: {
+      width: {
+        '120': '30rem',
+      },
+      minWidth: {
+        '120': '30rem',
+      },
+    },
   },
   plugins: [],
 }

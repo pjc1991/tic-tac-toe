@@ -42,7 +42,7 @@ function App() {
         setGameLog(newGameLog);
     }
 
-    function getWinner(newGameLog){
+    function getWinner(newGameLog) {
         const winningPatterns = [
             [[0, 0], [0, 1], [0, 2]],
             [[1, 0], [1, 1], [1, 2]],
@@ -86,49 +86,51 @@ function App() {
 
     return (
         <>
-            <main className="bg-black w-1/2 mx-auto p-4 rounded-lg mt-4 border-2 border-orange-600">
-                <h1 className="text-center text-4xl text-white font-bold mb-4">
-                    Let&#39;s play Tic-Tac-Toe!
-                </h1>
-                <hr className="border-2 border-orange-600 mt-2"/>
-                <header className="mt-4">
-                    <ul className="grid grid-cols-2 gap-4 justify-items-center">
-                        <Player name={player1} symbol="X" onEdit={(name) => setPlayer1(name)}/>
-                        <Player name={player2} symbol="O" onEdit={(name) => setPlayer2(name)}/>
-                    </ul>
-                </header>
-                <hr className="border-2 border-orange-600 mt-4"/>
-                <section>
-                    <div id="game-board" className="grid grid-cols-3 mt-4 justify-items-center gap-4">
-                        <GameBoard onChecked={handleCheck} gameLog={gameLog}/>
-                    </div>
-                </section>
-                <hr className="border-2 border-orange-600 mt-4"/>
-                <section>
-                    <GameStatus
-                        winner={winner}
-                        winnerName={getPlayerName(winner)}
-                        currentPlayerName={getPlayerName(getCurrentPlayer())}
-                    />
-                    <PlayAgain
-                        winner={winner}
-                        onPlayAgain={() => setGameLog([])}
-                    />
-                </section>
-                <hr className="border-2 border-orange-600 mt-4"/>
-                <section>
-                    <h2 className="text-center mt-4">
-                        Play log
-                    </h2>
-                    <ul className="text-center">
-                        {gameLog.map((log, index) => (
-                            <li key={index}>
-                                {`${getPlayerName(log.player)} moved to ${log.move.row +1}, ${log.move.column +1}`}
-                            </li>
-                        ))}
-                    </ul>
-                </section>
-            </main>
+            <div className="flex items-center justify-center h-screen min-w-120">
+                <main className="bg-black mx-auto p-4 rounded-lg border-2 border-orange-600 w-120">
+                    <h1 className="text-center text-4xl text-white font-bold mb-4">
+                        Let&#39;s play Tic-Tac-Toe!
+                    </h1>
+                    <hr className="border-2 border-orange-600 mt-2"/>
+                    <header className="mt-4">
+                        <ul className="grid grid-cols-2 gap-4 justify-items-center">
+                            <Player name={player1} symbol="X" onEdit={(name) => setPlayer1(name)}/>
+                            <Player name={player2} symbol="O" onEdit={(name) => setPlayer2(name)}/>
+                        </ul>
+                    </header>
+                    <hr className="border-2 border-orange-600 mt-4"/>
+                    <section>
+                        <div id="game-board" className="grid grid-cols-3 mt-4 justify-items-center gap-4">
+                            <GameBoard onChecked={handleCheck} gameLog={gameLog}/>
+                        </div>
+                    </section>
+                    <hr className="border-2 border-orange-600 mt-4"/>
+                    <section>
+                        <GameStatus
+                            winner={winner}
+                            winnerName={getPlayerName(winner)}
+                            currentPlayerName={getPlayerName(getCurrentPlayer())}
+                        />
+                        <PlayAgain
+                            winner={winner}
+                            onPlayAgain={() => setGameLog([])}
+                        />
+                    </section>
+                    <hr className="border-2 border-orange-600 mt-4"/>
+                    <section>
+                        <h2 className="text-center mt-4">
+                            Play log
+                        </h2>
+                        <ul className="text-center">
+                            {gameLog.map((log, index) => (
+                                <li key={index}>
+                                    {`${getPlayerName(log.player)} moved to ${log.move.row + 1}, ${log.move.column + 1}`}
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                </main>
+            </div>
         </>
     )
 }
