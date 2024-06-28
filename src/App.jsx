@@ -2,6 +2,7 @@ import {useState} from 'react'
 import Player from "./components/Player.jsx";
 import GameBoard from "./components/GameBoard.jsx";
 import GameStatus from "./components/GameStatus.jsx";
+import PlayAgain from "./components/PlayAgain.jsx";
 
 function App() {
 
@@ -109,16 +110,10 @@ function App() {
                         winnerName={getPlayerName(winner)}
                         currentPlayerName={getPlayerName(getCurrentPlayer())}
                     />
-                    <div className="text-center">
-                        {winner !== null && <button
-                            className="bg-orange-600 border-2 border-black text-white rounded-lg px-2 py-1 mt-4"
-                            onClick={() => {
-                                setGameLog([]);
-                            }}
-                        >
-                            Play Again
-                        </button>}
-                    </div>
+                    <PlayAgain
+                        winner={winner}
+                        onPlayAgain={() => setGameLog([])}
+                    />
                 </section>
                 <hr className="border-2 border-orange-600 mt-4"/>
                 <section>
